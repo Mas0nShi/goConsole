@@ -1,3 +1,3 @@
-module console
+module goConsole
 
 go 1.15
