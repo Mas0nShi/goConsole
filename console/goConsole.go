@@ -1,4 +1,4 @@
-package goConsole
+package console
 
 import (
 	"fmt"
