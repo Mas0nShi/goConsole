@@ -90,24 +90,6 @@ func init() {
 	}
 }
 
-func padStart(sources string, dest string, length int) string {
-	length -= len(sources)
-	if length < 0 {
-		panic("an error occured: Length is less than the sources")
-		length = 0
-	}
-	return strings.Repeat(dest, length) + sources
-}
-
-func padEnd(sources string, dest string, length int) string {
-	length -= len(sources)
-	if length < 0 {
-		panic("an error occured: Length is less than the sources")
-		length = 0
-	}
-	return sources + strings.Repeat(dest, length)
-}
-
 func stringAdd(sources string, dest ...string) string {
 	var pack strings.Builder
 	n := 0
