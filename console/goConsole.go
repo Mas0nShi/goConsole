@@ -2,7 +2,7 @@ package console
 
 import (
 	"fmt"
-	"runtime/debug"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -111,11 +111,13 @@ func getFormatTimeStr() string {
 }
 
 func getStack() string {
-	stack := string(debug.Stack())
-	stackSlices := strings.Split(stack, "\n")
-	document := strings.Split(stackSlices[8], "/")
-	indexOnRunning := strings.Split(document[len(document)-1], " +")[0]
-	return indexOnRunning
+	// rewrite logs format [package:fileLine]
+	var src string
+	pc, _, fileLine, ok := runtime.Caller(2)
+	if ok {
+		src = fmt.Sprintf("%s:%d", strings.Split(runtime.FuncForPC(pc).Name(), ".")[0], fileLine)
+	}
+	return src
 }
 
 func Log(args ...interface{}) {
@@ -151,12 +153,4 @@ func Error(args ...interface{}) {
 	fmt.Print(stringAdd(strings.Join(colorFmt.bold, getFormatTimeStr()), "  ", strings.Join(colorFmt.red, "|"), strings.Join(colorFmt.red, " ERROR "), strings.Join(colorFmt.red, "|"), "  ["+stacker+"]", strings.Repeat(" ", 6-len(strings.Split(stacker, ":")[1]))+"\uF127     "))
 	fmt.Print(args...)
 	fmt.Print("\n")
-}
-
-func main() {
-	Log("Hello World !")
-	Info("Hello World !")
-	Debug("Hello World !")
-	Warn("Hello World !")
-	Error("Hello World !")
 }
